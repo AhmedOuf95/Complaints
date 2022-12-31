@@ -4,6 +4,7 @@ using Complaints.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Complaints.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221231154214_EmployeeCompNote-Complaint-rel")]
+    partial class EmployeeCompNoteComplaintrel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,15 +127,10 @@ namespace Complaints.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompFileId"));
 
-                    b.Property<int>("CompId")
-                        .HasColumnType("int");
-
                     b.Property<byte>("file")
                         .HasColumnType("tinyint");
 
                     b.HasKey("CompFileId");
-
-                    b.HasIndex("CompId");
 
                     b.ToTable("ComplaintFiles");
                 });
@@ -380,17 +378,6 @@ namespace Complaints.Migrations
                     b.Navigation("EmployeeCompNote");
                 });
 
-            modelBuilder.Entity("Complaints.Models.ComplaintFile", b =>
-                {
-                    b.HasOne("Complaints.Models.Complaint", "Complaint")
-                        .WithMany("ComplaintFiles")
-                        .HasForeignKey("CompId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Complaint");
-                });
-
             modelBuilder.Entity("Complaints.Models.ComplaintTypeContact", b =>
                 {
                     b.HasOne("Complaints.Models.ComplaintType", "ComplaintType")
@@ -484,8 +471,6 @@ namespace Complaints.Migrations
 
             modelBuilder.Entity("Complaints.Models.Complaint", b =>
                 {
-                    b.Navigation("ComplaintFiles");
-
                     b.Navigation("EmployeeComplaints");
 
                     b.Navigation("Responses");

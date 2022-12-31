@@ -7,6 +7,13 @@ namespace Complaints.Models
         [Key]
         public int AreaId { get; set; }
 
-        public string Name { get; set; }
+        public string AreaName { get; set; }
+
+        public ICollection<Complaint> Complaints { get; set; }
+
+        public Area()
+        {
+            Complaints = new HashSet<Complaint>();
+        }
     }
 }

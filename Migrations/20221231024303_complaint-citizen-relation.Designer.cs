@@ -4,6 +4,7 @@ using Complaints.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Complaints.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221231024303_complaint-citizen-relation")]
+    partial class complaintcitizenrelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +33,7 @@ namespace Complaints.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AreaId"));
 
-                    b.Property<string>("AreaName")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AreaId");
@@ -79,39 +82,19 @@ namespace Complaints.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompId"));
 
-                    b.Property<int>("AreaId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CompIssuedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("CompStatusID")
-                        .HasColumnType("int");
 
                     b.Property<string>("CompText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CompTypeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CtzId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EmpCompNoteId")
                         .HasColumnType("int");
 
                     b.HasKey("CompId");
 
-                    b.HasIndex("AreaId");
-
-                    b.HasIndex("CompStatusID");
-
-                    b.HasIndex("CompTypeId");
-
                     b.HasIndex("CtzId");
-
-                    b.HasIndex("EmpCompNoteId");
 
                     b.ToTable("Complaints");
                 });
@@ -124,15 +107,10 @@ namespace Complaints.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompFileId"));
 
-                    b.Property<int>("CompId")
-                        .HasColumnType("int");
-
                     b.Property<byte>("file")
                         .HasColumnType("tinyint");
 
                     b.HasKey("CompFileId");
-
-                    b.HasIndex("CompId");
 
                     b.ToTable("ComplaintFiles");
                 });
@@ -163,33 +141,11 @@ namespace Complaints.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompTypeId"));
 
                     b.Property<string>("CompTypeName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CompTypeId");
 
                     b.ToTable("ComplaintTypes");
-                });
-
-            modelBuilder.Entity("Complaints.Models.ComplaintTypeContact", b =>
-                {
-                    b.Property<int>("CompTypeContactID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CompTypeContactName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CompTypeContactPhone")
-                        .HasColumnType("int");
-
-                    b.HasKey("CompTypeContactID", "CompTypeId");
-
-                    b.HasIndex("CompTypeId");
-
-                    b.ToTable("ComplaintTypeContacts");
                 });
 
             modelBuilder.Entity("Complaints.Models.Department", b =>
@@ -217,26 +173,11 @@ namespace Complaints.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmpId"));
 
-                    b.Property<int>("DeptId")
-                        .HasColumnType("int");
-
                     b.Property<string>("EmpName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("JobTitId")
-                        .HasColumnType("int");
-
                     b.HasKey("EmpId");
-
-                    b.HasIndex("DeptId");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("JobTitId");
 
                     b.ToTable("Employees");
                 });
@@ -249,32 +190,12 @@ namespace Complaints.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmpCompNoteId"));
 
-                    b.Property<int?>("CompId")
-                        .HasColumnType("int");
-
                     b.Property<string>("EmpCompNote")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmpCompNoteId");
 
-                    b.HasIndex("CompId");
-
                     b.ToTable("EmployeeCompNotes");
-                });
-
-            modelBuilder.Entity("Complaints.Models.EmployeeComplaint", b =>
-                {
-                    b.Property<int>("EmpId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EmpId", "CompId");
-
-                    b.HasIndex("CompId");
-
-                    b.ToTable("EmployeeComplaints");
                 });
 
             modelBuilder.Entity("Complaints.Models.JobTitle", b =>
@@ -302,23 +223,13 @@ namespace Complaints.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RespId"));
 
-                    b.Property<int>("CompId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("RespDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("RespText")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RespTypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("RespId");
-
-                    b.HasIndex("CompId");
-
-                    b.HasIndex("RespTypeId");
 
                     b.ToTable("Responses");
                 });
@@ -341,173 +252,18 @@ namespace Complaints.Migrations
 
             modelBuilder.Entity("Complaints.Models.Complaint", b =>
                 {
-                    b.HasOne("Complaints.Models.Area", "Area")
-                        .WithMany("Complaints")
-                        .HasForeignKey("AreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Complaints.Models.ComplaintStatus", "ComplaintStatus")
-                        .WithMany()
-                        .HasForeignKey("CompStatusID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Complaints.Models.ComplaintType", "ComplaintType")
-                        .WithMany("Complaints")
-                        .HasForeignKey("CompTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Complaints.Models.Citizen", "Citizen")
                         .WithMany("Complaints")
                         .HasForeignKey("CtzId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Complaints.Models.EmployeeCompNote", "EmployeeCompNote")
-                        .WithMany()
-                        .HasForeignKey("EmpCompNoteId");
-
-                    b.Navigation("Area");
-
                     b.Navigation("Citizen");
-
-                    b.Navigation("ComplaintStatus");
-
-                    b.Navigation("ComplaintType");
-
-                    b.Navigation("EmployeeCompNote");
-                });
-
-            modelBuilder.Entity("Complaints.Models.ComplaintFile", b =>
-                {
-                    b.HasOne("Complaints.Models.Complaint", "Complaint")
-                        .WithMany("ComplaintFiles")
-                        .HasForeignKey("CompId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Complaint");
-                });
-
-            modelBuilder.Entity("Complaints.Models.ComplaintTypeContact", b =>
-                {
-                    b.HasOne("Complaints.Models.ComplaintType", "ComplaintType")
-                        .WithMany("ComplaintTypeContacts")
-                        .HasForeignKey("CompTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ComplaintType");
-                });
-
-            modelBuilder.Entity("Complaints.Models.Employee", b =>
-                {
-                    b.HasOne("Complaints.Models.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DeptId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Complaints.Models.Employee", null)
-                        .WithMany("Employees")
-                        .HasForeignKey("EmployeeId");
-
-                    b.HasOne("Complaints.Models.JobTitle", "JobTitle")
-                        .WithMany()
-                        .HasForeignKey("JobTitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Department");
-
-                    b.Navigation("JobTitle");
-                });
-
-            modelBuilder.Entity("Complaints.Models.EmployeeCompNote", b =>
-                {
-                    b.HasOne("Complaints.Models.Complaint", "Complaint")
-                        .WithMany()
-                        .HasForeignKey("CompId");
-
-                    b.Navigation("Complaint");
-                });
-
-            modelBuilder.Entity("Complaints.Models.EmployeeComplaint", b =>
-                {
-                    b.HasOne("Complaints.Models.Complaint", "Complaint")
-                        .WithMany("EmployeeComplaints")
-                        .HasForeignKey("CompId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Complaints.Models.Employee", "Employee")
-                        .WithMany("EmployeeComplaints")
-                        .HasForeignKey("EmpId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Complaint");
-
-                    b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("Complaints.Models.Response", b =>
-                {
-                    b.HasOne("Complaints.Models.Complaint", "Complaint")
-                        .WithMany("Responses")
-                        .HasForeignKey("CompId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Complaints.Models.ResponseType", "ResponseType")
-                        .WithMany("Responses")
-                        .HasForeignKey("RespTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Complaint");
-
-                    b.Navigation("ResponseType");
-                });
-
-            modelBuilder.Entity("Complaints.Models.Area", b =>
-                {
-                    b.Navigation("Complaints");
                 });
 
             modelBuilder.Entity("Complaints.Models.Citizen", b =>
                 {
                     b.Navigation("Complaints");
-                });
-
-            modelBuilder.Entity("Complaints.Models.Complaint", b =>
-                {
-                    b.Navigation("ComplaintFiles");
-
-                    b.Navigation("EmployeeComplaints");
-
-                    b.Navigation("Responses");
-                });
-
-            modelBuilder.Entity("Complaints.Models.ComplaintType", b =>
-                {
-                    b.Navigation("ComplaintTypeContacts");
-
-                    b.Navigation("Complaints");
-                });
-
-            modelBuilder.Entity("Complaints.Models.Employee", b =>
-                {
-                    b.Navigation("EmployeeComplaints");
-
-                    b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("Complaints.Models.ResponseType", b =>
-                {
-                    b.Navigation("Responses");
                 });
 #pragma warning restore 612, 618
         }

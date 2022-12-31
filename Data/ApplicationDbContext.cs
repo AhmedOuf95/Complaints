@@ -11,10 +11,10 @@ namespace Complaints.Data
         public DbSet<ComplaintFile> ComplaintFiles { get; set; }
         public DbSet<ComplaintStatus> ComplaintStatuses { get; set; }
         public DbSet<ComplaintType> ComplaintTypes { get; set; }
-        //public DbSet<ComplaintTypeContact> ComplaintTypeContacts { get; set; }
+        public DbSet<ComplaintTypeContact> ComplaintTypeContacts { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
-        //public DbSet<EmployeeComplaint> EmployeeComplaints { get; set; }
+        public DbSet<EmployeeComplaint> EmployeeComplaints { get; set; }
         public DbSet<EmployeeCompNote> EmployeeCompNotes { get; set; }
         public DbSet<JobTitle> JobTitles { get; set; }
         public DbSet<Response> Responses { get; set; }
@@ -38,6 +38,12 @@ namespace Complaints.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<EmployeeComplaint>()
+                .HasKey(a => new { a.EmpId, a.CompId });
+
+            modelBuilder.Entity<ComplaintTypeContact>()
+                .HasKey(c => new { c.CompTypeContactID, c.CompTypeId });
+
             base.OnModelCreating(modelBuilder);
         }
     }

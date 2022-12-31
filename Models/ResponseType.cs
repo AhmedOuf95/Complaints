@@ -8,5 +8,12 @@ namespace Complaints.Models
         public int RespTypeId { get; set; }
 
         public string RespTypeName { get; set; }
+
+        public ICollection<Response> Responses { get; set; }
+
+        public ResponseType()
+        {
+            Responses = new HashSet<Response>();
+        }
     }
 }
