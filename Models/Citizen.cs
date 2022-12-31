@@ -21,5 +21,12 @@ namespace Complaints.Models
 
         [Required]
         public int CtzPhoneNumber { get; set; }
+
+        public ICollection<Complaint> Complaints { get; set; }
+
+        public Citizen()
+        {
+            Complaints = new HashSet<Complaint>();
+        }
     }
 }
