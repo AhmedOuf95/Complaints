@@ -4,6 +4,7 @@ using Complaints.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Complaints.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221231150749_ComplaintTypeContact-ComplaintType-rel")]
+    partial class ComplaintTypeContactComplaintTyperel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,13 +95,7 @@ namespace Complaints.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CompTypeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CtzId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EmpCompNoteId")
                         .HasColumnType("int");
 
                     b.HasKey("CompId");
@@ -107,11 +104,7 @@ namespace Complaints.Migrations
 
                     b.HasIndex("CompStatusID");
 
-                    b.HasIndex("CompTypeId");
-
                     b.HasIndex("CtzId");
-
-                    b.HasIndex("EmpCompNoteId");
 
                     b.ToTable("Complaints");
                 });
@@ -124,15 +117,10 @@ namespace Complaints.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompFileId"));
 
-                    b.Property<int>("CompId")
-                        .HasColumnType("int");
-
                     b.Property<byte>("file")
                         .HasColumnType("tinyint");
 
                     b.HasKey("CompFileId");
-
-                    b.HasIndex("CompId");
 
                     b.ToTable("ComplaintFiles");
                 });
@@ -249,15 +237,10 @@ namespace Complaints.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmpCompNoteId"));
 
-                    b.Property<int?>("CompId")
-                        .HasColumnType("int");
-
                     b.Property<string>("EmpCompNote")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmpCompNoteId");
-
-                    b.HasIndex("CompId");
 
                     b.ToTable("EmployeeCompNotes");
                 });
@@ -353,42 +336,17 @@ namespace Complaints.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Complaints.Models.ComplaintType", "ComplaintType")
-                        .WithMany("Complaints")
-                        .HasForeignKey("CompTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Complaints.Models.Citizen", "Citizen")
                         .WithMany("Complaints")
                         .HasForeignKey("CtzId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Complaints.Models.EmployeeCompNote", "EmployeeCompNote")
-                        .WithMany()
-                        .HasForeignKey("EmpCompNoteId");
-
                     b.Navigation("Area");
 
                     b.Navigation("Citizen");
 
                     b.Navigation("ComplaintStatus");
-
-                    b.Navigation("ComplaintType");
-
-                    b.Navigation("EmployeeCompNote");
-                });
-
-            modelBuilder.Entity("Complaints.Models.ComplaintFile", b =>
-                {
-                    b.HasOne("Complaints.Models.Complaint", "Complaint")
-                        .WithMany("ComplaintFiles")
-                        .HasForeignKey("CompId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Complaint");
                 });
 
             modelBuilder.Entity("Complaints.Models.ComplaintTypeContact", b =>
@@ -423,15 +381,6 @@ namespace Complaints.Migrations
                     b.Navigation("Department");
 
                     b.Navigation("JobTitle");
-                });
-
-            modelBuilder.Entity("Complaints.Models.EmployeeCompNote", b =>
-                {
-                    b.HasOne("Complaints.Models.Complaint", "Complaint")
-                        .WithMany()
-                        .HasForeignKey("CompId");
-
-                    b.Navigation("Complaint");
                 });
 
             modelBuilder.Entity("Complaints.Models.EmployeeComplaint", b =>
@@ -484,8 +433,6 @@ namespace Complaints.Migrations
 
             modelBuilder.Entity("Complaints.Models.Complaint", b =>
                 {
-                    b.Navigation("ComplaintFiles");
-
                     b.Navigation("EmployeeComplaints");
 
                     b.Navigation("Responses");
@@ -494,8 +441,6 @@ namespace Complaints.Migrations
             modelBuilder.Entity("Complaints.Models.ComplaintType", b =>
                 {
                     b.Navigation("ComplaintTypeContacts");
-
-                    b.Navigation("Complaints");
                 });
 
             modelBuilder.Entity("Complaints.Models.Employee", b =>

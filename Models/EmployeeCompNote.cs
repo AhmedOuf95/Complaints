@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Complaints.Models
 {
@@ -9,5 +10,8 @@ namespace Complaints.Models
 
         public string EmpCompNote { get; set; }
 
+        [ForeignKey("Complaint")]
+        public int? CompId { get; set; }
+        public Complaint Complaint { get; set; }
     }
 }
