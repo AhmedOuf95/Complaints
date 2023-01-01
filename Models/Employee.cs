@@ -6,7 +6,6 @@ namespace Complaints.Models
     public class Employee
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EmpId { get; set; }
 
         [Required]
